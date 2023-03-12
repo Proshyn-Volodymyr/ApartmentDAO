@@ -32,15 +32,15 @@ public class App {
             apartmentDao.addApartment("Prydniprovskyi", "Novoprechystenska 52, ap. 15", 42.20, 1, 35000);
             apartmentDao.addApartment("Pivdennozahidnuy", "Heroiv Maidanu 5, ap. 150", 100.00, 2, 100000);
 
-//            Getting a list of apartments by definite parameter
-//            apartmentDao.getApartments("id");
             while (flag) {
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("1. Show the table");
                 System.out.println("2. Add the new apartment");
                 System.out.println("3. Search apartment by parameter");
                 System.out.println("4. Quit");
+
                 int choice = scanner.nextInt();
+                scanner.nextLine();
                 switch (choice) {
                     case 1:
                         apartmentDao.getApartments();
@@ -49,6 +49,9 @@ public class App {
                         App.addNewApartment();
                         break;
                     case 3:
+                        System.out.println("Enter the parameter by which will be searching the apartments: ");
+                        String param = scanner.nextLine();
+                        apartmentDao.getApartmentsByParameters(param);
                         break;
                     case 4:
                         flag = false;

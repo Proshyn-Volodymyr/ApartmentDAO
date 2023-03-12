@@ -5,7 +5,6 @@ import com.gmail.vladimirprocean.shared.Apartment;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class ApartmentDaoImpl implements ApartmentDao {
     private Connection connection;
@@ -67,15 +66,38 @@ public class ApartmentDaoImpl implements ApartmentDao {
         System.out.println(apartments);
         return apartments;
     }
-//    private <T> List<T>  filterList(List<Apartment> initList, T param){
-//        List<T> tList = new ArrayList<>();
-//        String parameterType = param.getClass().getTypeName();
-//        for (Apartment listItem:initList
-//             ) {
-//            if()
-//        }
-//
-//        return tList;
-//    }
 
+    @Override
+    public List<Apartment> getApartmentsByParameters(String parameter) {
+        List<Apartment> apartments = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Apartments");
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+
+            while(resultSet.next()){
+                for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
+                    if(resultSet.getString(i).equals(parameter)){
+                        Apartment apartment = new Apartment();
+                        apartment.setId(resultSet.getInt(1));
+                        apartment.setDistrict(resultSet.getString(2));
+                        apartment.setAddress(resultSet.getString(3));
+                        apartment.setSquare(resultSet.getDouble(4));
+                        apartment.setAmountOfRooms(resultSet.getInt(5));
+                        apartment.setPrice(resultSet.getInt(6));
+
+                        apartments.add(apartment);
+                    }
+                }
+
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+        for (Apartment a:apartments
+             ) {
+            System.out.println(a);
+        }
+        return apartments;
+    }
 }
